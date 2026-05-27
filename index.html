@@ -3,82 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Imba App Store</title>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <title>App Store - Portfolio</title>
     <style>
-        * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
-        body { margin: 0; padding: 0; background-color: #0d0f12; color: #e4e6eb; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { margin: 0; padding: 0; background-color: #121212; color: #ffffff; }
+        header { background: #1e1e1e; padding: 20px; text-align: center; border-bottom: 2px solid #00ff88; }
+        h1 { margin: 0; color: #00ff88; }
         
-        header { 
-            background: linear-gradient(145deg, #161a22, #11141a); 
-            padding: 30px 20px; 
-            text-align: center; 
-            border-bottom: 3px solid #00ff88;
-            box-shadow: 0 4px 20px rgba(0, 255, 136, 0.15);
-        }
-        header h1 { margin: 0; color: #00ff88; font-size: 28px; text-shadow: 0 0 10px rgba(0,255,136,0.3); }
-        header p { margin: 5px 0 0; color: #aaa; font-size: 14px; }
-        
-        .tab-container { display: flex; justify-content: center; margin: 25px 0; }
-        .tab { 
-            padding: 12px 25px; cursor: pointer; background: #161a22; border: 1px solid #2d3543; 
-            color: #9aa0a6; margin: 0 8px; border-radius: 8px; font-weight: 600; transition: all 0.3s ease; 
-        }
-        .tab.active, .tab:hover { 
-            background: #00ff88; color: #0d0f12; font-weight: bold; 
-            box-shadow: 0 0 15px rgba(0, 255, 136, 0.4); border-color: #00ff88;
-        }
+        .tab-container { display: flex; justify-content: center; margin-top: 20px; }
+        .tab { padding: 10px 20px; cursor: pointer; background: #2a2a2a; border: none; color: white; margin: 0 5px; border-radius: 5px; transition: 0.3s; }
+        .tab.active, .tab:hover { background: #00ff88; color: #121212; font-weight: bold; }
 
-        .content { display: none; padding: 0 20px; max-width: 600px; margin: auto; }
-        .content.active { display: block; animation: fadeIn 0.5s ease; }
+        .content { display: none; padding: 20px; max-width: 600px; margin: auto; }
+        .content.active { display: block; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #ccc; }
+        input { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #333; background: #1e1e1e; color: white; margin-bottom: 10px; }
+        input:focus { outline: none; border-color: #00ff88; }
+        button.btn-submit { width: 100%; padding: 12px; background: #00ff88; color: #121212; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        button.btn-submit:hover { background: #00cc6a; }
 
-        /* Form Admin */
-        .form-card { background: #161a22; padding: 25px; border-radius: 12px; border: 1px solid #2d3543; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; color: #00ff88; }
-        input { 
-            width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #2d3543; 
-            background: #0d0f12; color: #fff; font-size: 15px; transition: 0.3s; 
-        }
-        input:focus { outline: none; border-color: #00ff88; box-shadow: 0 0 8px rgba(0,255,136,0.2); }
-        .btn-submit { 
-            width: 100%; padding: 14px; background: #00ff88; color: #0d0f12; border: none; 
-            border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; 
-        }
-        .btn-submit:hover { background: #00cc76; transform: scale(1.02); }
-
-        /* Daftar Aplikasi */
-        .app-card { 
-            background: #161a22; padding: 18px; margin-bottom: 15px; border-radius: 10px; 
-            border: 1px solid #2d3543; border-left: 5px solid #00ff88;
-            display: flex; justify-content: space-between; align-items: center;
-            transition: transform 0.2s;
-        }
-        .app-card:hover { transform: translateY(-2px); }
-        .app-name { font-size: 18px; font-weight: bold; color: #fff; }
-        .action-btns { display: flex; align-items: center; gap: 10px; }
-        .btn-download { 
-            background: #00ff88; color: #0d0f12; text-decoration: none; padding: 10px 20px; 
-            border-radius: 6px; font-weight: bold; font-size: 14px; transition: 0.3s;
-        }
-        .btn-download:hover { background: #00cc76; box-shadow: 0 0 10px rgba(0,255,136,0.2); }
-        .btn-delete { 
-            background: #ff4444; color: white; border: none; padding: 10px 14px; 
-            border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s;
-        }
-        .btn-delete:hover { background: #cc3333; }
-        
-        .loading { text-align: center; color: #aaa; font-style: italic; margin-top: 20px; }
+        .app-card { background: #1e1e1e; padding: 15px; margin-bottom: 15px; border-radius: 8px; border-left: 4px solid #00ff88; display: flex; justify-content: space-between; align-items: center; }
+        .app-name { font-size: 18px; font-weight: bold; }
+        .btn-download { background: #00ff88; color: #121212; text-decoration: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; font-size: 14px; }
+        .btn-download:hover { background: #00cc6a; }
+        .btn-delete { background: #ff4444; color: white; border: none; padding: 8px 10px; border-radius: 5px; cursor: pointer; margin-left: 10px; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Imba App Store</h1>
-        <p>Koleksi Aplikasi Buatanku Resmi</p>
+        <h1>My App Store</h1>
+        <p>Koleksi Aplikasi Buatanku</p>
     </header>
 
     <div class="tab-container">
@@ -87,88 +44,73 @@
     </div>
 
     <div id="public" class="content active">
-        <div id="appList"><div class="loading">Memuat aplikasi...</div></div>
+        <div id="appList"></div>
     </div>
 
     <div id="admin" class="content">
-        <div class="form-card">
-            <div class="form-group">
-                <label>Nama Aplikasi</label>
-                <input type="text" id="appName" placeholder="Contoh: FF Injector Pro" required>
-            </div>
-            <div class="form-group">
-                <label>Link MediaFire</label>
-                <input type="url" id="appLink" placeholder="https://www.mediafire.com/..." required>
-            </div>
-            <button class="btn-submit" onclick="addApp()">Post Aplikasi</button>
+        <div class="form-group">
+            <label>Nama Aplikasi</label>
+            <input type="text" id="appName" placeholder="Masukkan nama aplikasi..." required>
         </div>
+        <div class="form-group">
+            <label>Link MediaFire</label>
+            <input type="url" id="appLink" placeholder="https://www.mediafire.com/..." required>
+        </div>
+        <button class="btn-submit" onclick="addApp()">Post Aplikasi</button>
     </div>
 
     <script>
-        // Konfigurasi Firebase (Ganti dengan data milikmu sendiri)
-        const firebaseConfig = {
-            apiKey: "SALIN_API_KEY_MU_DISINI",
-            authDomain: "SALIN_AUTH_DOMAIN_MU_DISINI",
-            databaseURL: "SALIN_DATABASE_URL_MU_DISINI",
-            projectId: "SALIN_PROJECT_ID_MU_DISINI",
-            storageBucket: "SALIN_STORAGE_BUCKET_MU_DISINI",
-            messagingSenderId: "SALIN_MESSAGING_SENDER_ID_DISINI",
-            appId: "SALIN_APP_ID_DISINI"
-        };
-
-        // Inisialisasi Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database().ref('apps');
-
-        let currentTab = 'public';
-
+        // Pindah Tab dengan Verifikasi Password
         function switchTab(tabId) {
             if (tabId === 'admin') {
                 let password = prompt("Masukkan Password Admin:");
+                // Password default diatur ke 'imba'. Silakan ganti jika mau.
                 if (password !== "imba") {
-                    alert("Akses Ditolak!");
+                    alert("Akses Ditolak! Password Salah.");
                     return; 
                 }
             }
-            currentTab = tabId;
+
             document.querySelectorAll('.content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
-            event.target.classList.add('active');
-            renderApps();
+            
+            if (tabId === 'public') {
+                document.querySelectorAll('.tab')[0].classList.add('active');
+            } else {
+                document.querySelectorAll('.tab')[1].classList.add('active');
+            }
         }
 
-        // Ambil data Realtime dari Firebase
-        let localApps = {};
-        db.on('value', (snapshot) => {
-            localApps = snapshot.val() || {};
-            renderApps();
-        });
+        let apps = JSON.parse(localStorage.getItem('myApps')) || [];
 
         function renderApps() {
             const appList = document.getElementById('appList');
             appList.innerHTML = '';
             
-            const keys = Object.keys(localApps);
-            if(keys.length === 0) {
-                appList.innerHTML = '<p style="text-align:center; color:#aaa;">Belum ada aplikasi yang di-post.</p>';
+            if(apps.length === 0) {
+                appList.innerHTML = '<p style="text-align:center; color:#ccc;">Belum ada aplikasi yang di-post.</p>';
                 return;
             }
 
-            keys.forEach((key) => {
-                const app = localApps[key];
-                const showDelete = currentTab === 'admin' ? 'inline-block' : 'none';
-                
+            apps.forEach((app, index) => {
                 appList.innerHTML += `
                     <div class="app-card">
                         <div class="app-name">${app.name}</div>
-                        <div class="action-btns">
+                        <div>
                             <a href="${app.link}" target="_blank" class="btn-download">Download</a>
-                            <button class="btn-delete" style="display:${showDelete}" onclick="deleteApp('${key}')">X</button>
+                            <button class="btn-delete" style="display:none;" id="delBtn-${index}" onclick="deleteApp(${index})">X</button>
                         </div>
                     </div>
                 `;
             });
+
+            // Tampilkan tombol hapus HANYA jika sedang di dalam mode Admin
+            if (document.getElementById('admin').classList.contains('active')) {
+                apps.forEach((_, index) => {
+                    document.getElementById(`delBtn-${index}`).style.display = "inline-block";
+                });
+            }
         }
 
         function addApp() {
@@ -176,30 +118,35 @@
             const link = document.getElementById('appLink').value;
 
             if(name === '' || link === '') {
-                alert('Semua kolom wajib diisi!');
+                alert('Nama dan Link wajib diisi!');
                 return;
             }
 
-            // Simpan ke Firebase Cloud
-            db.push({ name: name, link: link }, (error) => {
-                if (error) {
-                    alert('Gagal menyimpan data!');
-                } else {
-                    document.getElementById('appName').value = '';
-                    document.getElementById('appLink').value = '';
-                    alert('Aplikasi berhasil di-post ke Cloud!');
-                    switchTab('public');
-                    document.querySelectorAll('.tab')[0].classList.add('active');
-                    document.querySelectorAll('.tab')[1].classList.remove('active');
-                }
-            });
+            apps.push({ name: name, link: link });
+            localStorage.setItem('myApps', JSON.stringify(apps)); 
+            
+            document.getElementById('appName').value = '';
+            document.getElementById('appLink').value = '';
+            
+            alert('Aplikasi berhasil ditambahkan!');
+            renderApps();
         }
 
-        function deleteApp(key) {
-            if(confirm('Hapus aplikasi ini dari cloud?')) {
-                firebase.database().ref('apps/' + key).remove();
+        function deleteApp(index) {
+            if(confirm('Hapus aplikasi ini?')) {
+                apps.splice(index, 1);
+                localStorage.setItem('myApps', JSON.stringify(apps));
+                renderApps();
             }
         }
+
+        // Jalankan render setiap tombol tab diklik untuk me-refresh tombol hapus
+        document.querySelectorAll('.tab').forEach(btn => {
+            btn.addEventListener('click', renderApps);
+        });
+
+        renderApps();
     </script>
+
 </body>
 </html>
